@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Custom class to interact with Hyprland
+APP_ID="org.aluminum.linode_status"
+WINDOW_PATTERN='org\.aluminum\.linode_status'
+
+LAUNCH_COMMAND="uwsm-app -- xdg-terminal-exec --app-id=$APP_ID -e bash -lc 'linode_status; read -n 1 -s -r -p \"Press any key to close…\"'"
+
+exec omarchy-launch-or-focus "$WINDOW_PATTERN" "$LAUNCH_COMMAND"
+
