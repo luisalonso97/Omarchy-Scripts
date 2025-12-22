@@ -196,10 +196,11 @@ now="$(date '+%Y-%m-%d %H:%M:%S')"
 days_quota_left="$((($(date -d "$(date +%Y-%m-01) +1 month -0 day" +%s) - $(date +%s)) / 86400))"
 
 echo "${BOLD}${CYAN}Linode Usage Summary${RESET} ${DIM}(${now})${RESET}"
-echo "${BOLD}${CYAN}Days left until quota reset:${RESET} ${DIM}${days_quota_left}${RESET}"
+
 echo
 
 # Account transfer
+echo "${BOLD}${CYAN}Days left until quota reset:${RESET} ${DIM}${days_quota_left}${RESET}"
 if tsv="$(parse_transfer)"; then
   IFS=$'\t' read -r used quota pct_num pct_disp <<<"$tsv"
   print_row "Global account transfer" "${used} GiB/${quota} GiB (${pct_disp})" "${pct_num:-}"
