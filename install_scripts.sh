@@ -3,4 +3,5 @@ set -euo pipefail
 
 install -m 755 -C ./linode_status ~/.local/bin/linode_status
 install -m 755 -C ./display_linode_status ~/.local/bin/display_linode_status
+install -m 755 -C ./short_url ~/.local/bin/short_url
 

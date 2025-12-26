@@ -1,0 +1,49 @@
+#!/bin/bash
+
+exec 2> /tmp/shorten_error.log
+
+ADMIN_TOKEN="${SHORTY_KEY}"
+API_URL="https://s.lalonso.com/shorten"
+
+if [ -z "$ADMIN_TOKEN" ]; then
+  notify-send "Shorten Error" "SHORTY_KEY is empty!"
+  exit 1
+fi
+
+url=$(wl-paste)
+
+if [ -z "$url" ]; then
+  notify-send "Shorten Error" "Clipboard is empty"
+  exit 1
+fi
+
+regex='^(https?)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
+
+if [[ ! "$url" =~ $regex ]]; then
+  notify-send --app-name="Short URL" "URL invalid: $url"
+  exit 1
+fi
+
+json_response=$(curl -X POST -s -w "\n%{http_code}" \
+  -H 'Content-Type: application/json' \
+  -H "X-Admin-Token: $ADMIN_TOKEN" \
+  -d "{\"target_url\":\"$url\"}" "$API_URL")
+
+http_status=$(echo "$json_response" | tail -n1)
+body=$(echo "$json_response" | sed '$d')
+
+if [ "$http_status" -ne 200 ]; then
+  notify-send "API Error" "Server returned $http_status"
+  echo "Body: $body" >> /tmp/shorten_error.log
+  exit 1
+fi
+
+short_url=$(echo "$body" | jq -r '.short_url')
+
+if [ "$short_url" != "null" ]; then
+  echo "$short_url" | wl-copy
+  notify-send --app-name="Short URL" "Success!" "$short_url copied"
+else
+  notify-send "Shorten Error" "JQ failed to parse response"
+fi
+
