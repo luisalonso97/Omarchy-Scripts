@@ -17,7 +17,7 @@ if [ -z "$url" ]; then
   exit 1
 fi
 
-regex='^(https?)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
+regex='^(https?)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]\.[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]$'
 
 if [[ ! "$url" =~ $regex ]]; then
   notify-send --app-name="Short URL" "URL invalid: $url"
