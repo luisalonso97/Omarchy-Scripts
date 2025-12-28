@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 # Custom class to interact with Hyprland
 APP_ID="org.aluminum.linode_status"
